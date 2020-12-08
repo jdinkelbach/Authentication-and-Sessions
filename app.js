@@ -28,7 +28,12 @@ app.post("/", function(req, res){
     let password = req.body.password;
     console.log("username: " + username);
     console.log("password: " + password);
-    res.send("this is the route using POST");
+    if (username == "admin" && password == "admin"){
+        res.send("Right credentials");
+    }
+    else{
+        res.render("index");
+    }
 })
 
 // Listener
