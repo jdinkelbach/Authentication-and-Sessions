@@ -15,12 +15,23 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// routes
+// For parsing post parameters
+app.use(express.urlencoded({extended: true}));
+
+// Routes
 app.get("/", function(req, res){
-    res.send("Login form will go here!");
+    res.render("index");
 })
 
-// listener
+app.post("/", function(req, res){
+    let username = req.body.username;
+    let password = req.body.password;
+    console.log("username: " + username);
+    console.log("password: " + password);
+    res.send("this is the route using POST");
+})
+
+// Listener
 app.listen(8080, "0.0.0.0", function(){
     console.log("Running Express Server");
 })
