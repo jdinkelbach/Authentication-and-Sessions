@@ -23,18 +23,28 @@ app.get("/", function(req, res){
     res.render("index");
 })
 
-app.post("/", function(req, res){
+app.post("/", async function(req, res){
     let username = req.body.username;
     let password = req.body.password;
-    console.log("username: " + username);
-    console.log("password: " + password);
-    if (username == "admin" && password == "admin"){
-        res.send("Right credentials");
+    let hashedPassword = '$2a$10$06ofFgXJ9wysAOzQh0D0..RcDp1w/urY3qhO6VuUJL2c6tzAJPfj6';
+    let passwordMatch = await checkPassword(password, hashedPassword);
+    
+    if (username == "admin" && passwordMatch){
+        res.render("welcome");
     }
     else{
-        res.render("index");
+        res.render("index", {loginError: true});
     }
 })
+
+function checkPassword(password, hashedValue){
+    return new Promise(function(resole, reject) {
+        bcrypt.compare(password, hashedValue, function(err, result){
+            console.log("Result: " + result);
+            resole(result);
+        });
+    });
+}
 
 // Listener
 app.listen(8080, "0.0.0.0", function(){
